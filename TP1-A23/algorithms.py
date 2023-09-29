@@ -63,7 +63,7 @@ def quicksort_first_first(arr):
         middle = [x for x in arr if x == pivot]
         right = [x for x in arr if x > pivot]
         
-        return quicksort_first_first(left, constants.THRESHOLD_ONE) + middle + quicksort_first_first(right, constants.THRESHOLD_ONE)
+        return quicksort_first_first(left) + middle + quicksort_first_first(right)
     else:
         return arr
 ##------------------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ def quicksort_experimental_first(arr):
         middle = [x for x in arr if x == pivot]
         right = [x for x in arr if x > pivot]
         
-        return quicksort_experimental_first(left, constants.THRESHOLD_EXPERIMENTAL_FIRST) + middle + quicksort_experimental_first(right, constants.THRESHOLD_EXPERIMENTAL_FIRST)
+        return quicksort_experimental_first(left) + middle + quicksort_experimental_first(right)
     else:
         return arr
 ##------------------------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ def quicksort_experimental_random(arr):
         middle = [x for x in arr if x == pivot]
         right = [x for x in arr if x > pivot]
         
-        return quicksort_experimental_random(left, constants.THRESHOLD_EXPERIMENTAL_EXPERIMENTAL) + middle + quicksort_experimental_random(right, constants.THRESHOLD_EXPERIMENTAL_EXPERIMENTAL)
+        return quicksort_experimental_random(left) + middle + quicksort_experimental_random(right)
     else:
         return arr
 ##------------------------------------------------------------------------------------------------
