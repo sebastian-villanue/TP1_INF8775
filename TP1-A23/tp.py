@@ -1,5 +1,85 @@
 import argparse
+import random
+import sys
 import time
+
+THRESHOLD_ONE = 1
+THRESHOLD_EXPERIMENTAL_FIRST = 12 ## See section in the lab report
+THRESHOLD_EXPERIMENTAL_RANDOM = 19 ## See section in the lab report
+TEST_THRESHOLDS = list(range(1,50))
+
+
+## Insertion Sort used in the quicksort algorithm
+def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and key < arr[j]:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+    return arr
+
+
+## Quicksort with a recursion threshold of 1 and with the pivot being the first element of the array
+def quicksort_first_first(arr):
+    if len(arr) <= THRESHOLD_ONE:
+        # Use insertion sort for small subarrays
+        return insertion_sort(arr)
+
+    pivot = arr[0]
+    lesser = []
+    greater = []
+
+    for element in arr[1:]:
+        if element < pivot:
+            lesser.append(element)
+        else:
+            greater.append(element)
+
+    return quicksort_first_first(lesser) + [pivot] + quicksort_first_first(greater)
+
+
+## Quicksort with a recursion threshold of 12 and with the pivot being the first element of the array
+def quicksort_experimental_first(arr):
+    if len(arr) <= THRESHOLD_EXPERIMENTAL_FIRST:
+        # Use insertion sort for small subarrays
+        return insertion_sort(arr)
+
+    pivot = arr[0]
+    lesser = []
+    greater = []
+
+    for element in arr[1:]:
+        if element < pivot:
+            lesser.append(element)
+        else:
+            greater.append(element)
+
+    return quicksort_experimental_first(lesser) + [pivot] + quicksort_experimental_first(greater)
+
+
+## Quicksort with a recursion threshold of 19 and with the pivot being generated randomly each time
+def quicksort_experimental_random(arr):
+    if len(arr) <= THRESHOLD_EXPERIMENTAL_RANDOM:
+        # Use insertion sort for small subarrays
+        return insertion_sort(arr)
+    
+    # Random index generated here
+    random_index = random.randint(0, len(arr)-1)
+    pivot = arr[random_index]
+    lesser = []
+    greater = []
+
+    for idx, element in enumerate(arr):
+        if idx == random_index:
+            continue
+        if element < pivot:
+            lesser.append(element)
+        else:
+            greater.append(element)
+
+    return quicksort_experimental_random(lesser) + [pivot] + quicksort_experimental_random(greater)
 
 
 def counting_sort(original_array: list) -> list:
@@ -20,6 +100,7 @@ def counting_sort(original_array: list) -> list:
 
     return output
 
+
 if __name__ == "__main__":
     # Parse arguments
     parser = argparse.ArgumentParser()
@@ -38,22 +119,22 @@ if __name__ == "__main__":
         sample = [int(n) for n in file.read().split()]
     
     sorted_sample = []
+    sys.setrecursionlimit(5000)
 
     start = time.time()
     match args.algorithm:
         case "counting":
-            pass
             sorted_sample = counting_sort(sample)
         case "quick":
-            pass
+            sorted_sample = quicksort_first_first(sample)
         case "quickSeuil":
-            pass
+            sorted_sample = quicksort_experimental_first(sample)
         case "quickSeuilRandom":
-            pass
+            sorted_sample = quicksort_experimental_random(sample)
         case _:
             print("L'algorithme choisi n'existe pas")
             exit(1)
-            
+
     end = time.time()
     execution_time = (end - start) * 1000
     
